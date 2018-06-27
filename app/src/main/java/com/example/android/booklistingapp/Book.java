@@ -8,9 +8,9 @@ public class Book {
     private String mTitle;
 
     // The year of publication
-    private int mYear;
+    private String mYear;
 
-    public Book(String author, String title, int year) {
+    public Book(String author, String title, String year) {
         mAuthor = author;
         mTitle = title;
         mYear = year;
@@ -24,7 +24,7 @@ public class Book {
         return mTitle;
     }
 
-    public int getYear() {
+    public String getYear() {
         return mYear;
     }
 }

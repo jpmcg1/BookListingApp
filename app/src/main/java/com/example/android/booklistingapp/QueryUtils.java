@@ -1,12 +1,20 @@
 package com.example.android.booklistingapp;
 
+import android.text.TextUtils;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class QueryUtils {
@@ -86,11 +94,53 @@ public class QueryUtils {
         return jsonResponse;
     }
 
-    private static String readFromStream(InputStream inputStream) {
-        return null;
+    // Convert the inputstream into a String which contains the whole JSON response
+    private static String readFromStream(InputStream inputStream) throws IOException {
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
     }
 
     public static List<Book> extractFeatureFromJson(String bookJsonResponse) {
-        return null;
+        // If the JSON string is null, return
+        if (TextUtils.isEmpty(bookJsonResponse)) {
+            return null;
+        }
+
+        // Create an empty list of books
+        List<Book> books = new ArrayList<>();
+
+        // Try to parse the JSON response.
+        // If there is a problem and exception is thron.
+        // Catch the exception so that the app doesn't crash andprint the error message to the log
+        try {
+            // Parse the JSON string and build a list of Book data.
+            JSONObject root = new JSONObject(bookJsonResponse);
+            JSONArray booksArray = root.getJSONArray("items");
+            for (int i = 0; i < booksArray.length(); i++) {
+                JSONObject book = booksArray.getJSONObject(i);
+                JSONObject volumeInfo = book.getJSONObject("volumeInfo");
+                String title = volumeInfo.getString("title");
+                String year = volumeInfo.getString("publishedDate");
+                JSONArray authors = volumeInfo.getJSONArray("authors");
+                String author = authors.getString(0);
+
+                books.add(new Book(author, title, year));
+            }
+
+        } catch (JSONException e) {
+            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+        }
+
+        // Return the list of books
+        return books;
     }
 }
