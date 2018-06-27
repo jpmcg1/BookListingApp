@@ -1,11 +1,14 @@
 package com.example.android.booklistingapp;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,9 +32,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    
-    /*// Create an AsyncTask to query the Google Book API and return a list of Book objects
-    private class BookAsyncTask extends AsyncTask<String, Void, List<E>> {
 
-    }*/
+    // Create an AsyncTask to query the Google Book API and return a list of Book objects
+    private class BookAsyncTask extends AsyncTask<String, Void, List<Book>> {
+
+        // In the background, if the search term is not null, get the book data
+        // from the API
+        @Override
+        protected List<Book> doInBackground(String... searchedWord) {
+            if (searchedWord.length < 1 || searchedWord[0] == null) {
+                return null;
+            }
+            /*List<Book> bookList = QueryUtils.fetchBookData(searchedWord[0]);
+            return booklist;*/
+
+            return null;
+        }
+
+
+    }
 }
