@@ -43,10 +43,8 @@ public class MainActivity extends AppCompatActivity {
             if (searchedWord.length < 1 || searchedWord[0] == null) {
                 return null;
             }
-            /*List<Book> bookList = QueryUtils.fetchBookData(searchedWord[0]);
-            return booklist;*/
-
-            return null;
+            List<Book> bookList = QueryUtils.fetchBookData(searchedWord[0]);
+            return bookList;
         }
 
 
