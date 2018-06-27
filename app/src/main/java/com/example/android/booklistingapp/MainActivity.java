@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        // When the search button is pressed on the screen, the inputted text is stored into
+        // the mSearchWord variable
         Button button = findViewById(R.id.search_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,4 +29,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    
+    /*// Create an AsyncTask to query the Google Book API and return a list of Book objects
+    private class BookAsyncTask extends AsyncTask<String, Void, List<E>> {
+
+    }*/
 }
