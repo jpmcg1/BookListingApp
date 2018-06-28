@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         // When the search button is pressed on the screen, the inputted text is stored into
         // the mSearchWord variable
         Button button = findViewById(R.id.search_button);
@@ -45,6 +45,13 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 Log.e("Main Activity", "The search word is......" + mSearchWord);
             }
         });
+
+        // Find a reference to the ListView in the layout
+        ListView bookListView = (ListView) findViewById(R.id.list);
+
+        // Set the empty state TextView onto the ListView
+        mEmptyTextView = (TextView) findViewById(R.id.empty_view);
+        bookListView.setEmptyView(mEmptyTextView);
 
         /*// Start the AsyncTask to fetch the book data with the user inputted word
         BookAsyncTask task = new BookAsyncTask();
@@ -60,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
-
             // Get a reference to the LoaderManager in order to interact with loaders
             LoaderManager loaderManager = getLoaderManager();
 
@@ -72,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             View loadingIndicator = findViewById(R.id.progress_bar);
             loadingIndicator.setVisibility(View.GONE);
 
-            // Update empty state with no connection rror message
+            // Update empty state with no connection error message
             mEmptyTextView.setText(R.string.no_internet_connection);
         }
     }

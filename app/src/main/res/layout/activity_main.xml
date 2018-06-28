@@ -11,19 +11,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- User input TextView -->
         <EditText
             android:id="@+id/search_word"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:layout_marginTop="32dp"/>
+            android:layout_marginTop="32dp" />
 
+
+        <!-- Search button -->
         <Button
             android:id="@+id/search_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
+            android:layout_below="@+id/search_word"
             android:padding="16dp"
-            android:layout_below="@+id/search_word" />
+            android:text="Search" />
+
+        <!-- List View to show the Book results from the search -->
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_button"
+            android:divider="@null"
+            android:dividerHeight="0dp" >
+        </ListView>
+
+        <!-- TextView in case there is no books available -->
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <!-- Add a progress bar to show the list is being generated -->
         <ProgressBar
@@ -31,7 +50,7 @@
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
 
     </RelativeLayout>
 
