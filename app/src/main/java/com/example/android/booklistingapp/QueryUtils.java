@@ -43,7 +43,8 @@ public class QueryUtils {
         URL url = null;
 
         try {
-            url = new URL("http://www.googleapis.com/books/v1/volumes?" + searchWord + "=search+terms");
+            url = new URL("http://www.googleapis.com/books/v1/volumes?"
+                    + searchWord + "=search+terms");
         } catch (MalformedURLException exception) {
             Log.e("QueryUtils", "Error with creating URL", exception);
             return null;
