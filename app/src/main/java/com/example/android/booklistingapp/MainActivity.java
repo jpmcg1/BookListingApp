@@ -2,7 +2,10 @@ package com.example.android.booklistingapp;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -20,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     // Constant for the BookLoader - only relevant when you have more than one
     private static final int BOOK_lOADER_ID = 1;
+
+    // TextView that is displayed whe the list is empty
+    private TextView mEmptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +50,32 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         BookAsyncTask task = new BookAsyncTask();
         task.execute(mSearchWord);*/
 
-        // Get a reference to the LoaderManager in order to interact with loaders
-        LoaderManager loaderManager = getLoaderManager();
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        // i.e. check if connected to the internet
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        // Initialse the loader
-        loaderManager.initLoader(BOOK_lOADER_ID, null, this);
+        // Get details on the currently active default data netwok
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        // If there is a network connection, fetch data
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            // Get a reference to the LoaderManager in order to interact with loaders
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Initialse the loader
+            loaderManager.initLoader(BOOK_lOADER_ID, null, this);
+        } else {
+            // First, hide loading indicator so error message will be visible as they both
+            // overlap in the centre of the screen
+            View loadingIndicator = findViewById(R.id.progress_bar);
+            loadingIndicator.setVisibility(View.GONE);
+
+            // Update empty state with no connection rror message
+            mEmptyTextView.setText(R.string.no_internet_connection);
+        }
     }
-
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
         // Create a new loader for a given search term
