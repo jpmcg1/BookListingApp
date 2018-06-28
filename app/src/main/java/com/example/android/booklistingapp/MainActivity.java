@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private String mSearchWord;
 
     // Constant for the BookLoader - only relevant when you have more than one
-    private static final int BOOK_lOADER_ID = 1;
+    private static final int BOOK_LOADER_ID = 1;
 
     // TextView that is displayed whe the list is empty
     private TextView mEmptyTextView;
@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         mEmptyTextView = (TextView) findViewById(R.id.empty_view);
         bookListView.setEmptyView(mEmptyTextView);
 
+        // TODO: create a new adapter for Book objects that takes an empty list as input
+        // TODO: and set the adapter to the listview
+
         /*// Start the AsyncTask to fetch the book data with the user inputted word
         BookAsyncTask task = new BookAsyncTask();
         task.execute(mSearchWord);*/
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             LoaderManager loaderManager = getLoaderManager();
 
             // Initialse the loader
-            loaderManager.initLoader(BOOK_lOADER_ID, null, this);
+            loaderManager.initLoader(BOOK_LOADER_ID, null, this);
         } else {
             // First, hide loading indicator so error message will be visible as they both
             // overlap in the centre of the screen
@@ -112,7 +115,5 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
             return bookList;
         }
-
-        // TODO: onPostExecute method with clear adapter and add to adapter methods
     }*/
 }

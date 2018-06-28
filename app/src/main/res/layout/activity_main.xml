@@ -42,7 +42,8 @@
         <TextView
             android:id="@+id/empty_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_button" />
 
         <!-- Add a progress bar to show the list is being generated -->
         <ProgressBar
