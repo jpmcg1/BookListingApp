@@ -16,35 +16,26 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<Book>> {
 
     // User inputted search term
     private String mSearchWord;
-
     // Constant for the BookLoader - only relevant when you have more than one
     private static final int BOOK_LOADER_ID = 1;
-
     // TextView that is displayed whe the list is empty
     private TextView mEmptyTextView;
+    // Adapter for the book list
+    private BookAdapter mAdapter;
+
+    /*----------------------------------------------------------------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // When the search button is pressed on the screen, the inputted text is stored into
-        // the mSearchWord variable
-        Button button = findViewById(R.id.search_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText searchWord = findViewById(R.id.search_word);
-                mSearchWord = searchWord.getText().toString();
-                Log.e("Main Activity", "The search word is......" + mSearchWord);
-            }
-        });
 
         // Find a reference to the ListView in the layout
         ListView bookListView = (ListView) findViewById(R.id.list);
@@ -53,8 +44,10 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         mEmptyTextView = (TextView) findViewById(R.id.empty_view);
         bookListView.setEmptyView(mEmptyTextView);
 
-        // TODO: create a new adapter for Book objects that takes an empty list as input
-        // TODO: and set the adapter to the listview
+        // Create a new adapter for Book objects that takes an empty list as input
+        mAdapter = new BookAdapter(this, new ArrayList<Book>());
+        // Set the adapter to the listview
+        bookListView.setAdapter(mAdapter);
 
         /*// Start the AsyncTask to fetch the book data with the user inputted word
         BookAsyncTask task = new BookAsyncTask();
@@ -84,7 +77,20 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             // Update empty state with no connection error message
             mEmptyTextView.setText(R.string.no_internet_connection);
         }
+
+        // When the search button is pressed on the screen, the inputted text is stored into
+        // the mSearchWord variable
+        Button button = findViewById(R.id.search_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText searchWord = findViewById(R.id.search_word);
+                mSearchWord = searchWord.getText().toString();
+                Log.e("Main Activity", "The search word is......" + mSearchWord);
+            }
+        });
     }
+
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
         // Create a new loader for a given search term
@@ -93,12 +99,28 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> data) {
-        // TODO: set the view, clear the adapter, add in new adapter data
+        // Once the load has finished, set the progess bar to invisible
+        View loadingIndicator = findViewById(R.id.progress_bar);
+        loadingIndicator.setVisibility(View.GONE);
+
+        // Set the empty state text to display "No books found"
+        mEmptyTextView.setText(R.string.no_books);
+
+        // Clear the adapter of previous book data
+        mAdapter.clear();
+
+        // If there is a valid list of books, add them to the adapter's data set.
+        // This will trigger the llistView to update
+        if (data != null && !data.isEmpty()) {
+            mAdapter.addAll(data);
+            Log.e("Main Activity", "The data has been retrieved!");
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
-        // TODO: reset the adapter
+        // Reset the adapter
+        mAdapter.clear();
     }
 
     /*// Create an AsyncTask to query the Google Book API and return a list of Book objects

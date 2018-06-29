@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryUtils {
+public final class QueryUtils {
 
     // Using the appropriate URL, get the book data from the Google Books API
     public static List<Book> fetchBookData(String searchWord) {
@@ -35,7 +35,7 @@ public class QueryUtils {
         // Parse and extract the relevant fields from the JSON response and create a list of
         // Book objects
         List<Book> books = extractFeatureFromJson(jsonResponse);
-        return null;
+        return books;
     }
 
     // Create a URL object from the searched word
@@ -45,6 +45,7 @@ public class QueryUtils {
         try {
             url = new URL("http://www.googleapis.com/books/v1/volumes?"
                     + searchWord + "=search+terms");
+            Log.e("QueryUtils", "url created successfully");
         } catch (MalformedURLException exception) {
             Log.e("QueryUtils", "Error with creating URL", exception);
             return null;
@@ -79,6 +80,7 @@ public class QueryUtils {
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
+                Log.e("QueryUtils", "URL Connection succesful");
             } else {
                 Log.e("QueryUtils", "Error response code " + urlConnection.getResponseCode());
             }
